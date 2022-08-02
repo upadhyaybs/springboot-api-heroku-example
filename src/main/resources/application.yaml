@@ -13,7 +13,7 @@ info:
 
  
 server:
-  port: 8080
+  port: ${port:8080}
   servlet:
     context-path: /spring-boot-api-heroku-demo
 
