@@ -24,6 +24,13 @@ plugins {
 	id 'com.google.cloud.tools.jib' version '1.8.0'
 }
 
+jar {
+	manifest {
+		attributes(
+				'Main-Class': 'com.codify.demo.SpringBootApiHerokuDemo'
+		)
+	}
+}
 
 apply plugin: "org.owasp.dependencycheck"
 apply plugin: "java"
@@ -35,7 +42,7 @@ apply plugin: 'com.google.cloud.tools.jib'
 
 
 group = 'com.codify'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 description = 'spring-boot-app-heroku-demo'
 sourceCompatibility = '1.8'
 
