@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: spring-boot-api-heroku-demo
+  profiles:
+    active: dev
+
+info:
+  app:
+    name: spring-boot-api-heroku-demo
+    type: Spring Boot
+    java: 
+      version: 8
+
+ 
+server:
+  port: 8080
+  servlet:
+    context-path: /spring-boot-api-heroku-demo
+
+management:
+  endpoint:
+    health:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*" 
+        
+

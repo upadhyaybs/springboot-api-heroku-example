@@ -1,0 +1,47 @@
+# spring-boot-api-heroku-demo
+
+-This is simple spring boot api heroku demo app with Rest Service Controller.
+
+### Build App
+
+You must have gradle installed (https://gradle.org/install/ ) and set GRADLE_HOME environment variable.
+
+Run the following command to build the app from the source code directory
+
+### Compile & Build :
+gradle clean build
+
+### Run application 
+java  -Dspring.profiles.active=dev -jar build/libs/*.jar
+
+### Run as docker image 
+
+Execute the following command to build docker image 
+
+./gradlew jibDockerBuild --image= dockerhub-id/image-name
+
+Example:
+
+./gradlew jibDockerBuild --image=johndoe/spring-boot-demo
+
+
+### Push the image to docker registry
+
+./gradlew jib --image=dockerhub-id/image-name
+
+Example:
+
+./gradlew jib --image=johndoe/spring-boot-demo
+
+### Test the application 
+
+Enter the below url in browser and you should get the response back
+
+```
+http://localhost:8080/greetings
+
+Output:
+
+Hello ! This is Spring Boot Demo App.
+```
+
