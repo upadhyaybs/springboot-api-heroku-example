@@ -46,8 +46,9 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests!
-      - run: gradle build test
-
+      - run: gradle clean
+      - run: gradle build
+      - run: gradle test
       - run:
           name: Deploy Main to Heroku
           command: |
