@@ -24,13 +24,6 @@ plugins {
 	id 'com.google.cloud.tools.jib' version '1.8.0'
 }
 
-jar {
-	manifest {
-		attributes(
-				'Main-Class': 'com.codify.demo.SpringBootApiHerokuDemo'
-		)
-	}
-}
 
 apply plugin: "org.owasp.dependencycheck"
 apply plugin: "java"
