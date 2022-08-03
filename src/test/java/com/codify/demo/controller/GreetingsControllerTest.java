@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
@@ -18,16 +17,15 @@ public class GreetingsControllerTest {
 	
 	@Autowired
 	private MockMvc mockMvc;
-	
 
 	@Test
-	public void shouldReturnDefaultMessage() throws Exception {
+	public void greetingTest() throws Exception {
 		this.mockMvc.perform(get("/greetings")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string(containsString("Hello ! This is Spring Boot Demo App.")));
 	}
 	
 	@Test
-	public void getMessageTest() throws Exception {
+	public void sayHelloTest() throws Exception {
 		this.mockMvc.perform(get("/greetings/hello?name=TestUser"))
 				.andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string(containsString("Hi TestUser")));

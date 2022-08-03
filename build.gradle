@@ -57,6 +57,10 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test'){
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	testImplementation group: 'com.intuit.karate', name: 'karate-mock-servlet', version: '1.2.1.RC2'
+	testImplementation group: 'com.intuit.karate', name: 'karate-junit5', version: '1.2.1.RC2'
+	testImplementation group: 'com.intuit.karate', name: 'karate-apache', version: '0.9.6'
+	testImplementation 'net.masterthought:cucumber-reporting:5.7.1'
 }
 
 
@@ -72,6 +76,19 @@ tasks.named("jar"){
 	archiveClassifier=''
 	duplicatesStrategy=DuplicatesStrategy.EXCLUDE
 
+}
+
+sourceSets {
+	test {
+		java {
+			srcDir file('src/test/java')
+			exclude '**/*UiRunner*.java'
+		}
+		resources {
+			srcDir file('src/test/java')
+			exclude '**/*.java'
+		}
+	}
 }
 
 test {
