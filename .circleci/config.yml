@@ -50,8 +50,14 @@ jobs:
           name: Run Gradle Build
           command: |
             gradle clean test --tests "com.codify.demo*"
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
       - store_test_results:
-          path: build/test-results
+          path: ~/test-results
       - run: 
           name: Check Code Coverage and Generate Report
           command: |
