@@ -1,4 +1,4 @@
-package com.codify.demo.karate.greetings.features;
+package karate.features.greetings;
 
 import com.intuit.karate.junit5.Karate;
 import cucumber.api.CucumberOptions;

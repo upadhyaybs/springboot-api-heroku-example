@@ -83,7 +83,7 @@ sourceSets {
 	test {
 		java {
 			srcDir file('src/test/java')
-			exclude '**/*UiRunner*.java'
+			//exclude '**/*Runner*.java'
 		}
 		resources {
 			srcDir file('src/test/java')
@@ -92,12 +92,12 @@ sourceSets {
 	}
 }
 
-test {
+test{
 	useJUnitPlatform()
 
 	// When running the test task, only run the base Test class which runs all cucumber
 	// tests in parallel.
-	include '**/*TestRunner*'
+	//include '**/*Runner.java'
 	// Pull karate options into the runtime
 	systemProperty "karate.options", System.properties.getProperty("karate.options")
 	// Pull karate options into the JVM
@@ -109,9 +109,12 @@ test {
 		showStandardStreams = true
 		testLogging.exceptionFormat = 'full'
 	}
+
 }
 
 jacocoTestReport {
 	reports.html
 	reports.xml
 }
+
+

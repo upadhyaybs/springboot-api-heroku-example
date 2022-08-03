@@ -1,4 +1,4 @@
-package com.codify.demo;
+package karate.features;
 
 
 import com.intuit.karate.Results;

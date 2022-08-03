@@ -47,9 +47,9 @@ jobs:
 
       # run tests!
       - run: gradle clean build
-      - run: gradle test
+      - run: gradle test --tests "com.codify.demo*"
       - store_artifacts:
-          path: build/reports
+          path: build/reports/tests
       - run: gradle jacocoTestReport
       - store_artifacts:
           path: build/reports/jacoco
@@ -57,3 +57,6 @@ jobs:
           name: Deploy Main to Heroku
           command: |
             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
+      - run: gradle test --tests "karate*"
+      - store_artifacts:
+          path: build/reports/karate-reports
