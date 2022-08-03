@@ -50,7 +50,7 @@ jobs:
           name: Run Gradle Build
           command: |
             gradle clean test --tests "com.codify.demo*"
-      - store_test_results::
+      - store_test_results:
           path: build/test-results
       - run: 
           name: Check Code Coverage and Generate Report
