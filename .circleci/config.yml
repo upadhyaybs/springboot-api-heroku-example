@@ -46,11 +46,12 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests!
-      - run: gradle clean build
-      - run: gradle test --tests "com.codify.demo*"
+      - run: gradle clean test --tests "com.codify.demo*"
+          name: Run Gradle Build
       - store_artifacts:
           path: build/reports/tests
       - run: gradle jacocoTestReport
+          name: Check Code Coverage and Generate Report
       - store_artifacts:
           path: build/reports/jacoco
       - run:
@@ -58,5 +59,6 @@ jobs:
           command: |
             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
       - run: gradle test --tests "karate*"
+         name: Run Automation API Tests and Generate Report
       - store_artifacts:
           path: build/reports/karate-reports
