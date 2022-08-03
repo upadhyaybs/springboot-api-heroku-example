@@ -53,6 +53,7 @@ configurations {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation('org.springframework.boot:spring-boot-starter-test'){
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -60,7 +61,7 @@ dependencies {
 	testImplementation group: 'com.intuit.karate', name: 'karate-mock-servlet', version: '1.2.1.RC2'
 	testImplementation group: 'com.intuit.karate', name: 'karate-junit5', version: '1.2.1.RC2'
 	testImplementation group: 'com.intuit.karate', name: 'karate-apache', version: '0.9.6'
-	testImplementation 'net.masterthought:cucumber-reporting:5.7.1'
+	testImplementation 'net.masterthought:cucumber-reporting:5.7.2'
 }
 
 
@@ -93,11 +94,24 @@ sourceSets {
 
 test {
 	useJUnitPlatform()
+
+	// When running the test task, only run the base Test class which runs all cucumber
+	// tests in parallel.
+	include '**/*TestRunner*'
+	// Pull karate options into the runtime
+	systemProperty "karate.options", System.properties.getProperty("karate.options")
+	// Pull karate options into the JVM
+	systemProperty "karate.env", System.properties.getProperty("karate.env")
+	// Ensure tests are always run
+	outputs.upToDateWhen { false }
+
+	testLogging {
+		showStandardStreams = true
+		testLogging.exceptionFormat = 'full'
+	}
 }
 
 jacocoTestReport {
-	reports {
-		xml.enabled false
-		html.enabled true
-	}
+	reports.html
+	reports.xml
 }

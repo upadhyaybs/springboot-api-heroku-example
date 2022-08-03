@@ -3,6 +3,7 @@ package com.codify.demo;
 
 import com.intuit.karate.Results;
 import com.intuit.karate.Runner;
+import com.intuit.karate.junit5.Karate;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import net.masterthought.cucumber.presentation.PresentationMode;
@@ -17,16 +18,19 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestParallel {
+public class TestRunner {
 
         @Test
         void testParallel(){
-            String karateoutputPath="build/reports";
-            Results results = Runner.path("classpath:com.codify.demo")
+            String karateoutputPath="build/reports/karate-reports";
+            Results results = Karate.run().relativeTo(getClass())
                     .outputCucumberJson(true)
-                    .karateEnv("demo")
-                    .parallel(5);
+                    .tags("~@ignore")
+                    .reportDir(karateoutputPath)
+                    .parallel(1);
+
             generateReport(results.getReportDir());
+
             assertTrue(results.getFailCount()==0, results.getErrorMessages());
         }
 
@@ -38,12 +42,9 @@ public class TestParallel {
 
             String projectName="spring-boot-api-heroku-demo";
 
-          //  Configuration configuration = new Configuration(new File("target"), "demo");
             Configuration configuration=new Configuration(reportOutputDir,projectName);
             configuration.setSortingMethod(SortingMethod.NATURAL);
             configuration.addPresentationModes(PresentationMode.EXPAND_ALL_STEPS);
-            configuration.setTrendsStatsFile(new File("build/demo-trends.json"));
-
             ReportBuilder reportBuilder = new ReportBuilder(jsonPaths, configuration);
             reportBuilder.generateReports();
 
