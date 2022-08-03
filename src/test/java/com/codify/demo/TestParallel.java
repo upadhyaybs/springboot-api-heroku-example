@@ -27,7 +27,7 @@ public class TestParallel {
                     .karateEnv("demo")
                     .parallel(5);
             generateReport(results.getReportDir());
-            assertEquals(results.getFailCount()==0, results.getErrorMessages());
+            assertTrue(results.getFailCount()==0, results.getErrorMessages());
         }
 
         void generateReport(String karateoutputPath){
