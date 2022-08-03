@@ -54,7 +54,7 @@ jobs:
           name: Save test results
           command: |
             mkdir -p ~/test-results/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+            find . -type f -regex ".*/build/test-results/test/.*xml" -exec cp {} ~/test-results/junit/ \;
           when: always
       - store_test_results:
           path: ~/test-results
@@ -62,8 +62,13 @@ jobs:
           name: Check Code Coverage and Generate Report
           command: |
             gradle jacocoTestReport
+      - run:
+          name: Save Code Coverage Report
+          command: |
+            mkdir -p ~/code-coverage/jacoco/
+            find . -type f -regex ".*/build/jacocoHtml/*" -exec cp {} ~/code-coverage/jacoco/ \;
       - store_artifacts:
-          path: build/reports/jacoco
+          path: ~/code-coverage
       - run:
           name: Deploy Main to Heroku
           command: |
@@ -73,4 +78,4 @@ jobs:
           command: |
             gradle test --tests "karate*"
       - store_artifacts:
-          path: build/reports/karate-reports
+          path: build/reports/karate-reports 
