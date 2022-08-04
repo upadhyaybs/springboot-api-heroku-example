@@ -64,7 +64,6 @@ dependencies {
 	testImplementation 'net.masterthought:cucumber-reporting:5.7.2'
 }
 
-
 tasks.named("bootJar"){
 	enabled=true
 	archiveClassifier=''
@@ -111,7 +110,6 @@ test{
 	}
 
 	finalizedBy jacocoTestReport
-
 }
 
 jacoco {
@@ -127,8 +125,6 @@ jacocoTestReport {
 		html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
 	}
 }
-
-
 
 jacocoTestCoverageVerification {
 	violationRules {
