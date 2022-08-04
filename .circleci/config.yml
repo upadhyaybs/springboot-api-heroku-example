@@ -62,13 +62,8 @@ jobs:
           name: Check Code Coverage and Generate Report
           command: |
             gradle jacocoTestReport
-      - run:
-          name: Save Code Coverage Report
-          command: |
-            mkdir -p ~/code-coverage/jacoco/
-            find . -type f -regex ".*/build/jacocoHtml/*" -exec cp {} ~/code-coverage/jacoco/ \;
       - store_artifacts:
-          path: ~/code-coverage
+          path: build/reports/jacocoHtml
       - run:
           name: Deploy Main to Heroku
           command: |
