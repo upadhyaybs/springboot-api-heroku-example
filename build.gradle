@@ -110,11 +110,47 @@ test{
 		testLogging.exceptionFormat = 'full'
 	}
 
+	finalizedBy jacocoTestReport
+
+}
+
+jacoco {
+	toolVersion = "0.8.8"
+	reportsDirectory = layout.buildDirectory.dir("$buildDir/jacoco")
 }
 
 jacocoTestReport {
-	reports.html
-	reports.xml
+	dependsOn test
+	reports {
+		xml.required = false
+		csv.required = false
+		html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
+	}
 }
+
+
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.5
+			}
+		}
+
+		rule {
+			enabled = false
+			element = 'CLASS'
+			includes = ['com.codify.*']
+
+			limit {
+				counter = 'LINE'
+				value = 'TOTALCOUNT'
+				maximum = 0.3
+			}
+		}
+	}
+}
+
 
 
