@@ -63,7 +63,7 @@ jobs:
           command: |
             gradle jacocoTestReport
       - store_artifacts:
-          path: build/jacocoHtml
+          path: build/reports/jacocoHtml
       - run:
           name: Deploy Main to Heroku
           command: |
