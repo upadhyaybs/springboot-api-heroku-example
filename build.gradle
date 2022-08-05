@@ -68,14 +68,12 @@ tasks.named("bootJar"){
 	enabled=true
 	archiveClassifier=''
 	duplicatesStrategy=DuplicatesStrategy.EXCLUDE
-
 }
 
 tasks.named("jar"){
 	enabled=false
 	archiveClassifier=''
 	duplicatesStrategy=DuplicatesStrategy.EXCLUDE
-
 }
 
 sourceSets {
@@ -93,22 +91,9 @@ sourceSets {
 
 test{
 	useJUnitPlatform()
-
-	// When running the test task, only run the base Test class which runs all cucumber
-	// tests in parallel.
-	//include '**/*Runner.java'
-	// Pull karate options into the runtime
-	systemProperty "karate.options", System.properties.getProperty("karate.options")
-	// Pull karate options into the JVM
-	systemProperty "karate.env", System.properties.getProperty("karate.env")
-	// Ensure tests are always run
-	outputs.upToDateWhen { false }
-
 	testLogging {
 		showStandardStreams = true
-		testLogging.exceptionFormat = 'full'
 	}
-
 	finalizedBy jacocoTestReport
 }
 
@@ -120,8 +105,12 @@ jacoco {
 jacocoTestReport {
 	dependsOn test
 	reports {
-		xml.required = false
-		csv.required = false
+		xml{
+			required = true
+		}
+		html{
+			required = true
+		}
 		html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
 	}
 }
@@ -147,6 +136,3 @@ jacocoTestCoverageVerification {
 		}
 	}
 }
-
-
-
