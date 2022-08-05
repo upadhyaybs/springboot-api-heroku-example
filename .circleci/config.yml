@@ -58,12 +58,6 @@ jobs:
           when: always
       - store_test_results:
           path: ~/test-results
-      - run: 
-          name: Check Code Coverage and Generate Report
-          command: |
-            gradle jacocoTestReport
-      - store_artifacts:
-          path: build/reports/jacoco
       - run:
           name: Deploy Main to Heroku Staging
           command: |
@@ -74,6 +68,12 @@ jobs:
             gradle test --tests "karate*"
       - store_artifacts:
           path: build/reports/karate-reports
+      - run: 
+          name: Check Code Coverage and Generate Report
+          command: |
+             gradle jacocoTestReport
+      - store_artifacts:
+          path: build/reports/jacoco
 
     deploy:
       steps:
