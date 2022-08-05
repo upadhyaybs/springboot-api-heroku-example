@@ -8,14 +8,7 @@ orbs:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  stage:
-    executor: heroku/default
-    steps:
-      - checkout
-      #- heroku/install
-      - heroku/deploy-via-git:
-          app-name: $HEROKU_STAGING_APP_NAME
-  test:
+  build:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -51,11 +44,12 @@ jobs:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
-      # run build!
+
+      # run tests!
       - run: 
           name: Run Gradle Build
           command: |
-            gradle clean build --tests "com.codify.demo*"
+            gradle clean test --tests "com.codify.demo*"
       - run:
           name: Save test results
           command: |
@@ -70,29 +64,36 @@ jobs:
             gradle jacocoTestReport
       - store_artifacts:
           path: build/reports/jacoco
+      - run:
+          name: Deploy Main to Heroku Staging
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_STAGING_APP_NAME.git main
       - run: 
           name: Run Automation API Tests and Generate Report
           command: |
             gradle test --tests "karate*"
       - store_artifacts:
-          path: build/reports/karate-reports 
+          path: build/reports/karate-reports
 
-  deploy:
-      executor: heroku/default
+    deploy:
       steps:
         - checkout
-        - heroku/install
-        - heroku/deploy-via-git:
-            app-name: $HEROKU_PRODUCTION_APP_NAME
+        - run:
+              name: Deploy Main to Heroku Production
+              command: |
+                git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PRODUCTION_APP_NAME.git main
 
-workflows:
-  version: 2
-  stage_test_deploy:
-    jobs:
-      - stage
-      - test:
-          requires:
-            - stage
-      - deploy:
-          requires:
-            - test
+    workflows:
+      stage_test_approve_deploy:
+        jobs:
+          - build
+          - test:
+              requires:
+                - build
+          - hold:
+              type: approval
+              requires:
+                - build
+          - deploy:
+              requires:
+                - hold
