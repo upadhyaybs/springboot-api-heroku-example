@@ -13,7 +13,7 @@ public class GreetingsController {
 
 	@GetMapping
 	public String greeting() {
-		return "Hello ! This is Spring Boot Demo App.";
+		return "Hello ! This is Spring Boot API Demo App.";
 	}
 
 	@GetMapping("/hello")

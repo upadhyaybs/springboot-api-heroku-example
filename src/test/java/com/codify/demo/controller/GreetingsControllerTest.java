@@ -21,7 +21,7 @@ public class GreetingsControllerTest {
 	@Test
 	public void greetingTest() throws Exception {
 		this.mockMvc.perform(get("/greetings")).andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(containsString("Hello ! This is Spring Boot Demo App.")));
+				.andExpect(content().string(containsString("Hello ! This is Spring Boot API Demo App.")));
 	}
 	
 	@Test
