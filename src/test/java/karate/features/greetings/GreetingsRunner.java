@@ -10,4 +10,5 @@ public class GreetingsRunner {
         return  Karate.run("GreetingsGetAPI").relativeTo(getClass());
     }
 
+
 }

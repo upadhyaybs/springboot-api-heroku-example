@@ -41,7 +41,6 @@ public class TestRunner {
             jsonFiles.forEach(file->jsonPaths.add(file.getAbsolutePath()));
 
             String projectName="spring-boot-api-heroku-demo";
-
             Configuration configuration=new Configuration(reportOutputDir,projectName);
             configuration.setSortingMethod(SortingMethod.NATURAL);
             configuration.addPresentationModes(PresentationMode.EXPAND_ALL_STEPS);

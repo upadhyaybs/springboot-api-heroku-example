@@ -27,11 +27,10 @@ version = '0.0.1-SNAPSHOT'
 description = 'spring-boot-api-heroku-demo'
 sourceCompatibility = '1.8'
 
+apply plugin: "java"
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
-apply plugin: "java"
 apply plugin: "jacoco"
-
 apply plugin: "org.owasp.dependencycheck"
 apply plugin: 'com.google.cloud.tools.jib'
 
@@ -94,7 +93,14 @@ test{
 	testLogging {
 		showStandardStreams = true
 	}
+	//exclude 'karate/features/**'
 	finalizedBy jacocoTestReport
+
+	if (System.properties['test.profile'] != 'automation') {
+			exclude '**/*karate*'
+		} else {
+			exclude '**/*com/*'
+	}
 }
 
 jacoco {

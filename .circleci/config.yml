@@ -49,7 +49,7 @@ jobs:
       - run: 
           name: Run Gradle Build
           command: |
-            gradle clean test --tests "com.codify.demo*"
+            gradle clean build test -Dtest.profile=unit
       - run:
           name: Save test results
           command: |
@@ -59,22 +59,20 @@ jobs:
       - store_test_results:
           path: ~/test-results
       - run:
+          name: Check Code Coverage and Generate Report
+      - store_artifacts:
+          path: build/reports/jacoco
+      - run:
           name: Deploy Main to Heroku Staging
           command: |
             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_STAGING_APP_NAME.git main
       - run: 
           name: Run Automation API Tests and Generate Report
           command: |
-            gradle test --tests "karate*"
+            gradle test -Dtest.profile=automation
       - store_artifacts:
           path: build/reports/karate-reports
-      - run: 
-          name: Check Code Coverage and Generate Report
-          command: |
-             gradle jacocoTestReport
-      - store_artifacts:
-          path: build/reports/jacoco
-  
+
   deploy:
         steps:
           - checkout
