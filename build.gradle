@@ -27,11 +27,10 @@ version = '0.0.1-SNAPSHOT'
 description = 'spring-boot-api-heroku-demo'
 sourceCompatibility = '1.8'
 
+apply plugin: "java"
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
-apply plugin: "java"
 apply plugin: "jacoco"
-
 apply plugin: "org.owasp.dependencycheck"
 apply plugin: 'com.google.cloud.tools.jib'
 
@@ -54,7 +53,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-logging'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.testng:testng:7.1.0'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation('org.springframework.boot:spring-boot-starter-test'){
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
@@ -62,20 +62,21 @@ dependencies {
 	testImplementation group: 'com.intuit.karate', name: 'karate-junit5', version: '1.2.1.RC2'
 	testImplementation group: 'com.intuit.karate', name: 'karate-apache', version: '0.9.6'
 	testImplementation 'net.masterthought:cucumber-reporting:5.7.2'
+	//testImplementation group: 'org.mock-server', name: 'mockserver-netty', version: '5.13.2'
+	testImplementation group: 'com.intuit.karate', name: 'karate-netty', version: '0.9.3.RC1'
+
 }
 
 tasks.named("bootJar"){
 	enabled=true
 	archiveClassifier=''
 	duplicatesStrategy=DuplicatesStrategy.EXCLUDE
-
 }
 
 tasks.named("jar"){
 	enabled=false
 	archiveClassifier=''
 	duplicatesStrategy=DuplicatesStrategy.EXCLUDE
-
 }
 
 sourceSets {
@@ -92,24 +93,29 @@ sourceSets {
 }
 
 test{
+
 	useJUnitPlatform()
-
-	// When running the test task, only run the base Test class which runs all cucumber
-	// tests in parallel.
-	//include '**/*Runner.java'
-	// Pull karate options into the runtime
-	systemProperty "karate.options", System.properties.getProperty("karate.options")
-	// Pull karate options into the JVM
-	systemProperty "karate.env", System.properties.getProperty("karate.env")
-	// Ensure tests are always run
-	outputs.upToDateWhen { false }
-
 	testLogging {
 		showStandardStreams = true
-		testLogging.exceptionFormat = 'full'
+	}
+	//exclude 'karate/features/**'
+	finalizedBy jacocoTestReport
+
+	if ( System.getProperty("test.profile") != 'automation')   {
+		println '#### No Automation'
+		exclude '**/*karate*'
+	}
+	else {
+		println '#### Automation || mock'
+
+		filter {
+			excludeTestsMatching "com.codify.demo.*, mock.greetings.*"
+		}
 	}
 
-	finalizedBy jacocoTestReport
+	println System.getProperty("test.profile") ? System.getProperty("test.profile") : 'no profile'
+	systemProperties = System.properties
+
 }
 
 jacoco {
@@ -120,8 +126,12 @@ jacoco {
 jacocoTestReport {
 	dependsOn test
 	reports {
-		xml.required = false
-		csv.required = false
+		xml{
+			required = true
+		}
+		html{
+			required = true
+		}
 		html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
 	}
 }
@@ -147,6 +157,3 @@ jacocoTestCoverageVerification {
 		}
 	}
 }
-
-
-

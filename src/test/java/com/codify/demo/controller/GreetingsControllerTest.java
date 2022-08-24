@@ -21,13 +21,13 @@ public class GreetingsControllerTest {
 	@Test
 	public void greetingTest() throws Exception {
 		this.mockMvc.perform(get("/greetings")).andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(containsString("Hello ! This is Spring Boot Demo App.")));
+				.andExpect(content().string(containsString("Hello ! This is Spring Boot API Demo App.")));
 	}
 	
 	@Test
 	public void sayHelloTest() throws Exception {
-		this.mockMvc.perform(get("/greetings/hello?name=TestUser"))
+		this.mockMvc.perform(get("/greetings/hello?name=John Doe"))
 				.andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(containsString("Hi TestUser")));
+				.andExpect(content().string(containsString("Hi John Doe")));
 	}
 }

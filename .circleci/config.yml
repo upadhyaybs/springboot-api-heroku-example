@@ -13,7 +13,7 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
       # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
+      - image: cimg/openjdk:15.0
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -49,7 +49,7 @@ jobs:
       - run: 
           name: Run Gradle Build
           command: |
-            gradle clean test --tests "com.codify.demo*"
+            gradle clean build test -Dtest.profile=unit
       - run:
           name: Save test results
           command: |
@@ -58,42 +58,41 @@ jobs:
           when: always
       - store_test_results:
           path: ~/test-results
-      - run: 
+      - run:
           name: Check Code Coverage and Generate Report
           command: |
-            gradle jacocoTestReport
+             gradle jacocoTestReport
       - store_artifacts:
           path: build/reports/jacoco
       - run:
-          name: Deploy Main to Heroku Staging
+          name: Deploy Stage to Heroku Staging
           command: |
             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_STAGING_APP_NAME.git main
       - run: 
           name: Run Automation API Tests and Generate Report
           command: |
-            gradle test --tests "karate*"
+            gradle test -Dtest.profile=automation
       - store_artifacts:
           path: build/reports/karate-reports
 
-    deploy:
-      steps:
-        - checkout
-        - run:
-              name: Deploy Main to Heroku Production
-              command: |
-                git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PRODUCTION_APP_NAME.git main
-
-    workflows:
-      stage_test_approve_deploy:
-        jobs:
-          - build
-          - test:
-              requires:
-                - build
-          - hold:
-              type: approval
-              requires:
-                - build
-          - deploy:
-              requires:
-                - hold
+  deploy:
+        steps:
+          - checkout
+          - run:
+                name: Deploy Main to Heroku Production
+                command: |
+                  git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_PRODUCTION_APP_NAME.git main
+                  
+workflows:
+  version: 2
+  build_approve_deploy:
+    jobs:
+      - build
+      - hold:
+          type: approval
+          requires:
+            - build
+      - deploy:
+          requires:
+            - hold 
+    

@@ -2,7 +2,7 @@ Feature: Greetings API Test
 
     Background:
       * url baseUrl
-      * def greetingBase = '/spring-boot-api-heroku-demo'
+      * def greetingBase = '/rest/api'
       * configure logPrettyRequest = true
       * configure logPrettyResponse = true
 
@@ -12,7 +12,7 @@ Feature: Greetings API Test
       When method GET
       Then status 200
       And print response
-      And match response == "Hello ! This is Spring Boot Demo App."
+      And match response == read('greetings-expected.json')
 
     @SayHello
     Scenario: Say Hello to Passed Name
