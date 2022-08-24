@@ -12,7 +12,7 @@ Feature: Greetings API Test
       When method GET
       Then status 200
       And print response
-      And match response == read('greetings-expected.json')
+      And match response == "Hello ! This is Spring Boot API Demo App."
 
     @SayHello
     Scenario: Say Hello to Passed Name
@@ -21,4 +21,5 @@ Feature: Greetings API Test
           When method GET
           Then status 200
           And print response
+          And match response == "Hello John Doe"
 

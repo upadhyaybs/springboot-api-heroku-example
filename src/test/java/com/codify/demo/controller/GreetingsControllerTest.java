@@ -28,6 +28,6 @@ public class GreetingsControllerTest {
 	public void sayHelloTest() throws Exception {
 		this.mockMvc.perform(get("/greetings/hello?name=John Doe"))
 				.andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(containsString("Hi John Doe")));
+				.andExpect(content().string(containsString("Hello John Doe")));
 	}
 }
