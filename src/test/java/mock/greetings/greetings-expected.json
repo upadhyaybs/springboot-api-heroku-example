@@ -1,7 +1,0 @@
-{
-  "response": {
-    "response": "Hello ! This is Spring Boot API Demo App.",
-    "createdTimestamp": "Fri Aug 12 17:03:58 CDT 2022",
-    "version": "1.0"
-  }
-}

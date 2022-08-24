@@ -13,9 +13,9 @@ info:
 
  
 server:
-  port: ${port:8080}
+  port: ${port:8085}
   servlet:
-    context-path: /spring-boot-api-heroku-demo
+    context-path: /rest/api
 
 management:
   endpoint:

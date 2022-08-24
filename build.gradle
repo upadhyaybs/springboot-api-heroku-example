@@ -53,7 +53,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-logging'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.testng:testng:7.1.0'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation('org.springframework.boot:spring-boot-starter-test'){
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
@@ -61,6 +62,9 @@ dependencies {
 	testImplementation group: 'com.intuit.karate', name: 'karate-junit5', version: '1.2.1.RC2'
 	testImplementation group: 'com.intuit.karate', name: 'karate-apache', version: '0.9.6'
 	testImplementation 'net.masterthought:cucumber-reporting:5.7.2'
+	//testImplementation group: 'org.mock-server', name: 'mockserver-netty', version: '5.13.2'
+	testImplementation group: 'com.intuit.karate', name: 'karate-netty', version: '0.9.3.RC1'
+
 }
 
 tasks.named("bootJar"){
@@ -89,6 +93,7 @@ sourceSets {
 }
 
 test{
+
 	useJUnitPlatform()
 	testLogging {
 		showStandardStreams = true
@@ -96,11 +101,21 @@ test{
 	//exclude 'karate/features/**'
 	finalizedBy jacocoTestReport
 
-	if (System.properties['test.profile'] != 'automation') {
-			exclude '**/*karate*'
-		} else {
-			exclude '**/*com/*'
+	if ( System.getProperty("test.profile") != 'automation')   {
+		println '#### No Automation'
+		exclude '**/*karate*'
 	}
+	else {
+		println '#### Automation || mock'
+
+		filter {
+			excludeTestsMatching "com.codify.demo.*, mock.greetings.*"
+		}
+	}
+
+	println System.getProperty("test.profile") ? System.getProperty("test.profile") : 'no profile'
+	systemProperties = System.properties
+
 }
 
 jacoco {
