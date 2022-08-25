@@ -101,20 +101,27 @@ test{
 	//exclude 'karate/features/**'
 	finalizedBy jacocoTestReport
 
-	if ( System.getProperty("test.profile") != 'automation')   {
-		println '#### No Automation'
-		exclude '**/*karate*'
-	}
-	else {
-		println '#### Automation || mock'
-
-		filter {
-			excludeTestsMatching "com.codify.demo.*, mock.greetings.*"
-		}
-	}
-
 	println System.getProperty("test.profile") ? System.getProperty("test.profile") : 'no profile'
+
+	if (System.getProperty("test.profile")==null){
+		System.setProperty("test.profile","build")
+	}
 	systemProperties = System.properties
+	if (System.getProperty("test.profile") == 'automation')   {
+		println '#### Running Automation Execution'
+		exclude '**/*com*'
+		exclude '**/*mock*'
+	}
+	if (System.getProperty("test.profile") == 'mock')   {
+		println '#### Running Mock Execution'
+		exclude '**/*com/*'
+		exclude '**/*karate/*'
+	}
+	if (System.getProperty("test.profile") == 'build')   {
+		println '#### Running Unit Test'
+		exclude '**/*mock/*'
+		exclude '**/*karate/*'
+	}
 
 }
 

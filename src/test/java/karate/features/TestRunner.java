@@ -2,8 +2,8 @@ package karate.features;
 
 
 import com.intuit.karate.Results;
+import com.intuit.karate.Runner;
 import com.intuit.karate.core.MockServer;
-import com.intuit.karate.junit5.Karate;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import net.masterthought.cucumber.presentation.PresentationMode;
@@ -42,7 +42,7 @@ public class TestRunner {
             String systemProp=System.getProperty("test.profile");
             System.out.println("##############"+systemProp+"###########");
             String karateoutputPath="build/reports/karate-reports";
-            Results results = Karate.run().relativeTo(getClass())
+            Results results = Runner.path("classpath:karate/features/greetings")
                         .outputCucumberJson(true)
                         .tags("~@ignore")
                         .reportDir(karateoutputPath)
