@@ -13,7 +13,7 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
       # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
+      - image: cimg/openjdk:15.0
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -49,7 +49,7 @@ jobs:
       - run: 
           name: Run Gradle Build
           command: |
-            gradle clean build test -Dtest.profile=unit
+            gradle clean build test -Dtest.profile=build
       - run:
           name: Save test results
           command: |
