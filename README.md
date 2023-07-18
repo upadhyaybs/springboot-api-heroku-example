@@ -1,4 +1,4 @@
-# spring-boot-api-heroku-demo
+# springboot-api-heroku-example
 
 -This is simple spring boot api heroku demo app with Rest Service Controller.
 
